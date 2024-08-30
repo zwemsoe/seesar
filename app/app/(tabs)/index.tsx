@@ -1,14 +1,7 @@
-import { StyleSheet, ScrollView } from "react-native";
-import { HelloWave } from "~/components/HelloWave";
-import { Text } from "~/components/ui/text";
+import { StyleSheet, ScrollView, SafeAreaView } from "react-native";
 
 export default function HomeScreen() {
-  return (
-    <ScrollView>
-      <Text>Welcome!</Text>
-      <HelloWave />
-    </ScrollView>
-  );
+  return <ScrollView></ScrollView>;
 }
 
 const styles = StyleSheet.create({});
