@@ -1,7 +1,7 @@
 import { Tabs, useRouter } from "expo-router";
 import React from "react";
 import { Colors } from "~/lib/constants";
-import { Home, Plus, CircleUser, XIcon, Moon, Sun } from "~/lib/icons";
+import { Home, Plus, Settings, XIcon, Moon, Sun } from "~/lib/icons";
 import { useColorScheme } from "~/hooks/useColorScheme";
 import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
@@ -85,16 +85,16 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name='profile'
+        name='settings'
         options={{
-          title: "Profile",
+          title: "Settings",
           tabBarIcon: ({ color, focused }) => (
-            <CircleUser color={color} strokeWidth={focused ? 2.3 : 1.8} />
+            <Settings color={color} strokeWidth={focused ? 2.3 : 1.8} />
           ),
           headerTitle: () => (
             <View className='w-full flex-row justify-between items-center'>
               <Text className='text-3xl font-bold leading-loose'>
-                {t("profile")}
+                {t("settings")}
               </Text>
               <Toggle
                 pressed={isDarkColorScheme}

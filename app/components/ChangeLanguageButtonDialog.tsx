@@ -63,9 +63,8 @@ export function ChangeLanguageButtonDialog() {
                 "py-2": currentLanguage === "mm",
               })}
             >
-              {t("language")}
+              {`${t("language")} (${currentLanguage === "en" ? "🇬🇧" : "🇲🇲"})`}
             </Text>
-            <Text>({currentLanguage === "en" ? "🇬🇧" : "🇲🇲"})</Text>
           </View>
           <SquarePenIcon
             size={18}

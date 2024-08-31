@@ -11,6 +11,12 @@ import {
   ArrowLeft,
   ExternalLink,
   ChevronLeftIcon,
+  Play,
+  Undo,
+  Redo,
+  Pause,
+  Trash,
+  Settings,
 } from "lucide-react-native";
 import { iconWithClassName } from "./iconWithClassName";
 
@@ -30,6 +36,12 @@ iconWithClassName(Sun);
 iconWithClassName(ArrowLeft);
 iconWithClassName(SquarePenIcon);
 iconWithClassName(ChevronLeftIcon);
+iconWithClassName(Play);
+iconWithClassName(Pause);
+iconWithClassName(Undo);
+iconWithClassName(Redo);
+iconWithClassName(Trash);
+iconWithClassName(Settings);
 
 export {
   Home,
@@ -45,4 +57,10 @@ export {
   ArrowLeft,
   SquarePenIcon,
   ChevronLeftIcon,
+  Play,
+  Pause,
+  Undo,
+  Redo,
+  Trash,
+  Settings,
 };

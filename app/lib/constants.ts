@@ -1,3 +1,5 @@
+import { Theme } from "@react-navigation/native";
+
 export const NAV_THEME = {
   light: {
     background: "hsl(0 0% 100%)", // background
@@ -17,7 +19,6 @@ export const NAV_THEME = {
   },
 };
 
-
 export const Colors = {
   light: {
     text: "#000000",
@@ -35,4 +36,14 @@ export const Colors = {
     tabIconDefault: "#9BA1A6",
     tabIconSelected: "#fff",
   },
+};
+
+export const LIGHT_THEME: Theme = {
+  dark: false,
+  colors: NAV_THEME.light,
+};
+
+export const DARK_THEME: Theme = {
+  dark: true,
+  colors: NAV_THEME.dark,
 };
