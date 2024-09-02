@@ -62,6 +62,15 @@ app.post("/process-link", async (req: Request, res: Response) => {
     preserveNewlines: false,
   }).replace(/\n{3,}/g, "\n\n");
 
+  let textEn = text;
+
+  if (!lang.startsWith("en")) {
+    const translation = await translate(text, {
+      to: "en",
+    });
+    textEn = translation.text;
+  }
+
   const translation = await translate(text, {
     to: "my",
   });
@@ -71,14 +80,13 @@ app.post("/process-link", async (req: Request, res: Response) => {
     title,
     siteName,
     author: byline,
-    textEn: text,
-    textMM: translation.text,
+    textEn,
+    textMM: translation?.text ?? "",
     publishedTime,
   });
 });
 
 app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
-  console.error(err.stack);
   res.status(500).send("Something went wrong");
 });
 

@@ -1,15 +1,16 @@
 import { create } from "zustand";
+import { SupportedLanguages } from "~/translations";
 
 export type CurrentReader = {
   url: string;
-  language: "en" | "my";
+  language: SupportedLanguages;
   setUrl: (url: string) => void;
-  setLanguage: (language: "en" | "my") => void;
+  setLanguage: (language: SupportedLanguages) => void;
 };
 
 export const useCurrentReaderStore = create<CurrentReader>((set) => ({
   url: "",
-  language: "my",
+  language: "mm",
   setUrl: (url: string) => set({ url }),
-  setLanguage: (language: "en" | "my") => set({ language }),
+  setLanguage: (language: SupportedLanguages) => set({ language }),
 }));

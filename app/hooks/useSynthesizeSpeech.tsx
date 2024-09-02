@@ -1,7 +1,6 @@
 import { arrayBufferToBase64, transformToSSML } from "~/lib/speech";
 import * as FileSystem from "expo-file-system";
 import { useEffect, useState } from "react";
-import * as Crypto from "expo-crypto";
 import TrackPlayer from "react-native-track-player";
 import { useCurrentReaderStore } from "~/state/store";
 import { getAudioFileName } from "~/lib/utils";
@@ -52,7 +51,7 @@ export const useSynthesizeSpeech = ({
           "Content-Type": "application/ssml+xml",
           "X-Microsoft-OutputFormat": "audio-16khz-128kbitrate-mono-mp3",
         },
-        body: transformToSSML(text),
+        body: transformToSSML(text, language),
       });
 
       if (!response.ok) {
@@ -71,6 +70,7 @@ export const useSynthesizeSpeech = ({
 
       setFileUri(cachedFileUri);
     } catch (error) {
+      console.error(error);
       setError("Failed to synthesize speech");
     } finally {
       setIsLoading(false);

@@ -15,7 +15,7 @@ import { LocalDatabase, useDatabase } from "~/db/provider";
 import { LinkContent, linkContentTable } from "~/db/schema";
 import { useColorScheme } from "~/hooks/useColorScheme";
 import { Colors } from "~/lib/constants";
-import { truncateString } from "~/lib/utils";
+import { cn, truncateString } from "~/lib/utils";
 import { useCurrentReaderStore } from "~/state/store";
 import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
@@ -35,7 +35,8 @@ const fetchYourLinks = async (db: LocalDatabase) => {
 };
 
 export default function HomeScreen() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currentLanguage = i18n.language;
   const router = useRouter();
   const { db } = useDatabase();
   const setUrl = useCurrentReaderStore((state) => state.setUrl);
@@ -82,7 +83,7 @@ export default function HomeScreen() {
                 {truncateString(item.title ?? "", 40)}
               </Text>
               <Text className='text-sm text-gray-500 font-semibold'>
-                {`10mins | ${item.siteName}`}
+                {`${item.siteName}`}
               </Text>
             </View>
           </TouchableOpacity>
@@ -96,8 +97,20 @@ export default function HomeScreen() {
           </View>
         </View>
       ) : (
-        <Button variant='outline' onPress={() => router.push("/input")}>
-          <Text>{t("addYourFirstFile")}</Text>
+        <Button
+          variant='outline'
+          onPress={() => router.push("/input")}
+          className={cn("", {
+            "min-h-14": currentLanguage === "mm",
+          })}
+        >
+          <Text
+            className={cn("leading-loose", {
+              "py-1.5": currentLanguage === "mm",
+            })}
+          >
+            {t("addYourFirstFile")}
+          </Text>
         </Button>
       )}
 

@@ -1,27 +1,51 @@
+import { SupportedLanguages } from "~/translations";
+
 const wrapWithLang = (match: string, lang: string) => {
   return `<lang xml:lang="${lang}">${match}</lang>`;
 };
 
-export const transformToSSML = (text: string) => {
-  const burmeseRegex = /[\u1000-\u109F]+(?:[\u1000-\u109F၊။\s]*)/g;
-  const englishRegex = /[a-zA-Z0-9\s,.'"-]+/g;
+const createSSML = (content: string) => {
+  return `
+    <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:gender="Male" xml:lang="en-US">
+      <voice name="en-US-BrianMultilingualNeural" xml:lang="en-US">
+        ${content}
+      </voice>
+    </speak>
+  `.trim();
+};
 
-  let transformedText = text.replace(englishRegex, (match) =>
-    wrapWithLang(match, "en-US")
-  );
-  transformedText = transformedText.replace(burmeseRegex, (match) =>
-    wrapWithLang(match, "mm-MY")
-  );
+const escapeXML = (str: string) => {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+};
 
-  const ssml = `
-            <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">
-          <voice name="en-US-BrianMultilingualNeural" >
-          ${transformedText}
-          </voice>
-          </speak>
-            `;
+const replaceEscapes = (str: string) => {
+  return str
+    .replace(/&amp;/g, " ")
+    .replace(/&lt;/g, " ")
+    .replace(/&gt;/g, " ")
+    .replace(/&quot;/g, " ")
+    .replace(/&apos;/g, " ");
+};
 
-  return ssml.trim();
+export const transformToSSML = (text: string, lang: SupportedLanguages) => {
+  let cleanText = escapeXML(text.replace(/\n/g, " "));
+  if (lang === "mm") {
+    cleanText = replaceEscapes(cleanText);
+    const englishRegex = /[a-zA-Z]+(?:[a-zA-Z\s]*)/g;
+
+    const transformedText = cleanText.replace(englishRegex, (match) => {
+      return wrapWithLang(match, "en-US");
+    });
+
+    return createSSML(transformedText);
+  } else {
+    return createSSML(cleanText);
+  }
 };
 
 export const arrayBufferToBase64 = (buffer: ArrayBuffer) => {

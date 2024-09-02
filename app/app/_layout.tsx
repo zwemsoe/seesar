@@ -14,6 +14,7 @@ import { DARK_THEME, LIGHT_THEME } from "~/lib/constants";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { DatabaseProvider } from "~/db/provider";
 import { useMigrationHelper } from "~/db/drizzle";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 export { ErrorBoundary } from "expo-router";
 
 TrackPlayer.registerPlaybackService(() => playbackService);
@@ -73,13 +74,15 @@ function RootLayoutNav() {
       <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
         <DatabaseProvider>
           <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <Stack
-              screenOptions={{
-                headerShown: false,
-              }}
-            />
-          </GestureHandlerRootView>
+          <SafeAreaProvider>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                }}
+              />
+            </GestureHandlerRootView>
+          </SafeAreaProvider>
           <PortalHost />
         </DatabaseProvider>
       </ThemeProvider>

@@ -88,7 +88,7 @@ const AudioPlayer = ({
   };
 
   const changeLanguage = () => {
-    setLanguage(language === "en" ? "my" : "en");
+    setLanguage(language === "en" ? "mm" : "en");
   };
 
   return (

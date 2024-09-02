@@ -9,7 +9,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Skeleton } from "~/components/ui/skeleton";
 import AudioPlayer from "~/components/audio-player";
 import { Separator } from "~/components/ui/separator";
-import { useState } from "react";
 import { cn } from "~/lib/utils";
 import { useCurrentReaderStore } from "~/state/store";
 import { LinkContent } from "~/db/schema";
@@ -95,7 +94,7 @@ export default function AudioReaderPage() {
           ) : (
             <Text
               className={cn("text-primary leading-loose text-lg", {
-                "pt-2": language === "my",
+                "pt-2": language === "mm",
               })}
             >
               {language === "en" ? data?.textEn : data?.textMM}
