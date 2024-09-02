@@ -17,6 +17,8 @@ import {
   Pause,
   Trash,
   Settings,
+  Link2,
+  AudioLines,
 } from "lucide-react-native";
 import { iconWithClassName } from "./iconWithClassName";
 
@@ -42,6 +44,8 @@ iconWithClassName(Undo);
 iconWithClassName(Redo);
 iconWithClassName(Trash);
 iconWithClassName(Settings);
+iconWithClassName(Link2);
+iconWithClassName(AudioLines);
 
 export {
   Home,
@@ -63,4 +67,6 @@ export {
   Redo,
   Trash,
   Settings,
+  Link2,
+  AudioLines,
 };

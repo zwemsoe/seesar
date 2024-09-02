@@ -1,9 +1,7 @@
-import { useEffect, useRef } from "react";
 import TrackPlayer, {
   Capability,
   Event,
   RatingType,
-  RepeatMode,
 } from "react-native-track-player";
 
 export const setupPlayer = async () => {

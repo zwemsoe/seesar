@@ -23,12 +23,12 @@ const TEST_AUDIO_URL =
   "https://oxkggefcizudronypngp.supabase.co/storage/v1/object/public/test/audio_1724730288890.mp3";
 
 const AudioPlayer = ({
-  text,
+  text = "",
   textLoading,
   language,
   setLanguage,
 }: {
-  text?: string;
+  text?: string | null;
   textLoading: boolean;
   language: "en" | "my";
   setLanguage: (language: "en" | "my") => void;

@@ -44,18 +44,6 @@
       ],
       "expo-localization",
       [
-        "expo-font",
-        {
-          "fonts": ["./assets/fonts/Padauk-Regular.ttf"]
-        }
-      ],
-      [
-        "expo-asset",
-        {
-          "assets": ["assets/audio/test.mp3"]
-        }
-      ],
-      [
         "expo-build-properties",
         {
           "android": {

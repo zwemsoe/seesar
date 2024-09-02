@@ -17,8 +17,6 @@ app.get("/", (req: Request, res: Response) => {
 app.post("/process-link", async (req: Request, res: Response) => {
   const url: string = req.body?.url || "";
 
-  console.log(url);
-
   if (!url) {
     return res.status(400).json({ error: "URL is required" });
   }
@@ -44,7 +42,7 @@ app.post("/process-link", async (req: Request, res: Response) => {
     return res.status(400).json({ error: "Unable to process link" });
   }
 
-  const { content, title, byline, publishedTime } = parsed;
+  const { content, title, byline, publishedTime, siteName, lang } = parsed;
 
   const text = htmlToText(content, {
     selectors: [
@@ -68,15 +66,14 @@ app.post("/process-link", async (req: Request, res: Response) => {
     to: "my",
   });
 
-  const cleanedUrl = new URL(url).hostname;
-
   return res.status(200).json({
-    original: text,
-    translated: translation.text,
+    url,
     title,
-    publishedTime,
+    siteName,
     author: byline,
-    url: cleanedUrl,
+    textEn: text,
+    textMM: translation.text,
+    publishedTime,
   });
 });
 

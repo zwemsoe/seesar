@@ -12,6 +12,8 @@ import TrackPlayer from "react-native-track-player";
 import { playbackService, setupPlayer } from "~/lib/track-player";
 import { DARK_THEME, LIGHT_THEME } from "~/lib/constants";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { DatabaseProvider } from "~/db/provider";
+import { useMigrationHelper } from "~/db/drizzle";
 export { ErrorBoundary } from "expo-router";
 
 TrackPlayer.registerPlaybackService(() => playbackService);
@@ -24,6 +26,7 @@ export default function RootLayout() {
   const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
   const [error, setError] = React.useState(false);
+  const { success, error: migrationError } = useMigrationHelper();
 
   React.useEffect(() => {
     (async () => {
@@ -56,23 +59,25 @@ export default function RootLayout() {
       });
   }, []);
 
-  if (!isColorSchemeLoaded || error) {
+  if (!isColorSchemeLoaded || error || migrationError || !success) {
     return null;
   }
 
   return (
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-      <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-      <QueryClientProvider client={queryClient}>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <Stack
-            screenOptions={{
-              headerShown: false,
-            }}
-          />
-        </GestureHandlerRootView>
-        <PortalHost />
-      </QueryClientProvider>
+      <DatabaseProvider>
+        <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+        <QueryClientProvider client={queryClient}>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <Stack
+              screenOptions={{
+                headerShown: false,
+              }}
+            />
+          </GestureHandlerRootView>
+          <PortalHost />
+        </QueryClientProvider>
+      </DatabaseProvider>
     </ThemeProvider>
   );
 }
