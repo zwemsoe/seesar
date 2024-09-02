@@ -6,13 +6,15 @@ import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
 import { Textarea } from "~/components/ui/textarea";
+import { cn } from "~/lib/utils";
 import { useCurrentReaderStore } from "~/state/store";
 
 const urlSchema = z.string().url().min(1);
 
 export default function InputScreen() {
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currentLanguage = i18n.language;
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
   const setUrl = useCurrentReaderStore((state) => state.setUrl);
@@ -20,7 +22,9 @@ export default function InputScreen() {
   const handleSubmit = () => {
     try {
       urlSchema.parse(value);
-      setUrl(value);
+      setUrl(value.trim());
+      setError("");
+      setValue("");
       router.push("/reader");
     } catch (error) {
       setError("Invalid Input");
@@ -40,10 +44,20 @@ export default function InputScreen() {
         className='w-10/12 mt-10'
       />
 
-      {error && <Text className='text-red-500'>{error}</Text>}
+      {error && (
+        <Text className='text-red-500 text-sm text-center mt-4 leading-loose'>
+          {t("invalidInput")}
+        </Text>
+      )}
 
-      <Button className='mt-10  w-3/12' onPress={handleSubmit}>
-        <Text>Listen</Text>
+      <Button className='mt-10' onPress={handleSubmit}>
+        <Text
+          className={cn("leading-loose", {
+            "pt-1.5": currentLanguage === "mm",
+          })}
+        >
+          {t("translate")}
+        </Text>
       </Button>
     </ScrollView>
   );

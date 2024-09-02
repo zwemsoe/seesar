@@ -20,8 +20,6 @@ TrackPlayer.registerPlaybackService(() => playbackService);
 
 SplashScreen.preventAutoHideAsync();
 
-const queryClient = new QueryClient();
-
 export default function RootLayout() {
   const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
@@ -63,11 +61,18 @@ export default function RootLayout() {
     return null;
   }
 
+  return <RootLayoutNav />;
+}
+
+function RootLayoutNav() {
+  const queryClient = new QueryClient();
+  const { isDarkColorScheme } = useColorScheme();
+
   return (
-    <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-      <DatabaseProvider>
-        <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-        <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+        <DatabaseProvider>
+          <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
           <GestureHandlerRootView style={{ flex: 1 }}>
             <Stack
               screenOptions={{
@@ -76,8 +81,8 @@ export default function RootLayout() {
             />
           </GestureHandlerRootView>
           <PortalHost />
-        </QueryClientProvider>
-      </DatabaseProvider>
-    </ThemeProvider>
+        </DatabaseProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }

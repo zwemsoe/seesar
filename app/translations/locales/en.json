@@ -4,5 +4,14 @@
   "changeLanguage": "Change Language",
   "settings": "Settings",
   "profileOpenAccount": "Please log in to view profile",
-  "inputTitle": "Convert any link into Burmese audio and text instantly"
+  "inputTitle": "Convert any link into Burmese audio and text instantly",
+  "yourFiles": "Your files",
+  "samples": "Samples",
+  "addYourFirstFile": "Add your first file",
+  "serverError": "Sorry, something went wrong.",
+  "invalidInput": "Invalid input. Please enter a valid URL.",
+  "deleteFiles": "Delete all files",
+  "translate": "Translate",
+  "deleteFilesConfirmation": "Delete all files",
+  "deleteFilesConfirmationDescription": "This action cannot be undone. This will permanently delete your local files."
 }

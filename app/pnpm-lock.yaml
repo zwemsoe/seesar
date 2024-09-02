@@ -17,6 +17,9 @@ dependencies:
   '@react-navigation/native':
     specifier: ^6.0.2
     version: 6.1.18(react-native@0.74.5)(react@18.2.0)
+  '@rn-primitives/alert-dialog':
+    specifier: ^1.0.3
+    version: 1.0.3(@rn-primitives/portal@1.0.3)(@types/react@18.2.79)(react-dom@18.2.0)(react-native-web@0.19.12)(react-native@0.74.5)(react@18.2.0)
   '@rn-primitives/dialog':
     specifier: ^1.0.3
     version: 1.0.3(@rn-primitives/portal@1.0.3)(@types/react@18.2.79)(react-dom@18.2.0)(react-native-web@0.19.12)(react-native@0.74.5)(react@18.2.0)
@@ -74,6 +77,9 @@ dependencies:
   expo-constants:
     specifier: ~16.0.2
     version: 16.0.2(expo@51.0.31)
+  expo-crypto:
+    specifier: ~13.0.2
+    version: 13.0.2(expo@51.0.31)
   expo-dev-client:
     specifier: ~4.0.25
     version: 4.0.25(expo@51.0.31)
@@ -3029,6 +3035,30 @@ packages:
     resolution: {integrity: sha512-4Z8dn6Upk0qk4P74xBhZ6Hd/w0mPEzOOLxy4xiPXOXqjF7jZS0VAKk7/x/H6FyY2zCkYJqePf1G5KmkmNJ4RBA==}
     dev: false
 
+  /@radix-ui/react-alert-dialog@1.1.1(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-wmCoJwj7byuVuiLKqDLlX7ClSUU0vd9sdCeM+2Ls+uf13+cpSJoMgwysHq1SGVVkJj5Xn0XWi1NoRCdkMpr6Mw==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+    dependencies:
+      '@radix-ui/primitive': 1.1.0
+      '@radix-ui/react-compose-refs': 1.1.0(@types/react@18.2.79)(react@18.2.0)
+      '@radix-ui/react-context': 1.1.0(@types/react@18.2.79)(react@18.2.0)
+      '@radix-ui/react-dialog': 1.1.1(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-primitive': 2.0.0(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-slot': 1.1.0(@types/react@18.2.79)(react@18.2.0)
+      '@types/react': 18.2.79
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
   /@radix-ui/react-arrow@1.1.0(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-FmlW1rCg7hBpEBwFbjHwCW6AmWLQM6g/v0Sn8XbP9NvmSZ2San1FpQeyPtufzOMSIx7Y4dzjlHoifhp+7NkZhw==}
     peerDependencies:
@@ -4131,6 +4161,33 @@ packages:
     resolution: {integrity: sha512-KRJtwrjRV5Bb+pM7zxcTJkhIqWWSy+MYsIxHK+0m5atcznsf15YwUBWHWulZerV2+vvHH1Lp1DD7pw6qKW8SgA==}
     dependencies:
       web-streams-polyfill: 3.3.3
+    dev: false
+
+  /@rn-primitives/alert-dialog@1.0.3(@rn-primitives/portal@1.0.3)(@types/react@18.2.79)(react-dom@18.2.0)(react-native-web@0.19.12)(react-native@0.74.5)(react@18.2.0):
+    resolution: {integrity: sha512-3ST+/GtSfVYlLqWGBw9pzYutliyrH6PHw9/jgrYl2V2Cqgqrizv/AyWAa2KBQiG0aBz+mbrIttbjgFLf48s/QA==}
+    peerDependencies:
+      '@rn-primitives/portal': '*'
+      react: '*'
+      react-native: '*'
+      react-native-web: '*'
+    peerDependenciesMeta:
+      react-native:
+        optional: true
+      react-native-web:
+        optional: true
+    dependencies:
+      '@radix-ui/react-alert-dialog': 1.1.1(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0)
+      '@rn-primitives/hooks': 1.0.3(react-native-web@0.19.12)(react-native@0.74.5)(react@18.2.0)
+      '@rn-primitives/portal': 1.0.3(@types/react@18.2.79)(react-native-web@0.19.12)(react-native@0.74.5)(react@18.2.0)
+      '@rn-primitives/slot': 1.0.3(react-native-web@0.19.12)(react-native@0.74.5)(react@18.2.0)
+      '@rn-primitives/types': 1.0.3(react-native-web@0.19.12)(react-native@0.74.5)(react@18.2.0)
+      react: 18.2.0
+      react-native: 0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4)(@types/react@18.2.79)(react@18.2.0)
+      react-native-web: 0.19.12(react-dom@18.2.0)(react@18.2.0)
+    transitivePeerDependencies:
+      - '@types/react'
+      - '@types/react-dom'
+      - react-dom
     dev: false
 
   /@rn-primitives/dialog@1.0.3(@rn-primitives/portal@1.0.3)(@types/react@18.2.79)(react-dom@18.2.0)(react-native-web@0.19.12)(react-native@0.74.5)(react@18.2.0):
@@ -6486,6 +6543,15 @@ packages:
       expo: 51.0.31(@babel/core@7.25.2)(@babel/preset-env@7.25.4)
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /expo-crypto@13.0.2(expo@51.0.31):
+    resolution: {integrity: sha512-7f/IMPYJZkBM21LNEMXGrNo/0uXSVfZTwufUdpNKedJR0fm5fH4DCSN79ZddlV26nF90PuXjK2inIbI6lb0qRA==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      base64-js: 1.5.1
+      expo: 51.0.31(@babel/core@7.25.2)(@babel/preset-env@7.25.4)
     dev: false
 
   /expo-dev-client@4.0.25(expo@51.0.31):

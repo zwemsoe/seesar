@@ -47,3 +47,5 @@ export const DARK_THEME: Theme = {
   dark: true,
   colors: NAV_THEME.dark,
 };
+
+export const AUDIO_FILE_PREFIX = "seesar-audio-";

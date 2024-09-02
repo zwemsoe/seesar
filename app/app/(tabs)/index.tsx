@@ -19,6 +19,7 @@ import { truncateString } from "~/lib/utils";
 import { useCurrentReaderStore } from "~/state/store";
 import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
+import { useTranslation } from "react-i18next";
 
 const fetchYourLinks = async (db: LocalDatabase) => {
   if (!db) {
@@ -34,6 +35,7 @@ const fetchYourLinks = async (db: LocalDatabase) => {
 };
 
 export default function HomeScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { db } = useDatabase();
   const setUrl = useCurrentReaderStore((state) => state.setUrl);
@@ -47,12 +49,16 @@ export default function HomeScreen() {
 
   return (
     <ScrollView contentContainerClassName='flex-1 pt-4 px-5'>
-      <Text className='text-2xl font-bold mb-4'>Your Files</Text>
+      <Text className='text-2xl font-bold mb-4 leading-loose'>
+        {t("yourFiles")}
+      </Text>
 
       {error && (
-        <Text className='text-red-500 font-medium text-md text-center mb-4'>
-          Sorry, something went wrong.
-        </Text>
+        <View className='p-2 border border-red-500 rounded-lg mb-4'>
+          <Text className='text-red-500 font-medium text-md text-center leading-loose'>
+            {t("serverError")}
+          </Text>
+        </View>
       )}
 
       {data && data.length > 0 ? (
@@ -91,11 +97,13 @@ export default function HomeScreen() {
         </View>
       ) : (
         <Button variant='outline' onPress={() => router.push("/input")}>
-          <Text>Add your first file</Text>
+          <Text>{t("addYourFirstFile")}</Text>
         </Button>
       )}
 
-      <Text className='text-2xl font-bold mb-3 mt-20'>Samples</Text>
+      <Text className='text-2xl font-bold mb-3 mt-10 leading-loose'>
+        {t("samples")}
+      </Text>
       {Array.from({ length: 5 }).map((item) => (
         <TouchableOpacity
           key={Math.random()}
