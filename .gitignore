@@ -1,3 +1,5 @@
 .env*.local
 *.unused.ts
 audio
+.vercel
+node_modules

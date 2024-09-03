@@ -1,21 +1,22 @@
-import express, { NextFunction, Request, Response } from "express";
-import cors from "cors";
-import puppeteer from "puppeteer";
-import translate from "@iamtraction/google-translate";
-import { isProbablyReaderable, Readability } from "@mozilla/readability";
-import { JSDOM } from "jsdom";
-import { htmlToText } from "html-to-text";
+const express = require("express");
+const cors = require("cors");
+const translate = require("@iamtraction/google-translate");
+const { isProbablyReaderable, Readability } = require("@mozilla/readability");
+const { JSDOM } = require("jsdom");
+const { convert } = require("html-to-text");
+const puppeteer = require("puppeteer");
+require("dotenv").config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.post("/process-link", async (req: Request, res: Response) => {
-  const url: string = req.body?.url || "";
+app.post("/process-link", async (req, res) => {
+  const url = req.body?.url || "";
 
   if (!url) {
     return res.status(400).json({ error: "URL is required" });
@@ -23,11 +24,20 @@ app.post("/process-link", async (req: Request, res: Response) => {
 
   const browser = await puppeteer.launch({
     headless: true,
-    args: ["--no-sandbox"],
+    args: [
+      "--disable-setuid-sandbox",
+      "--no-sandbox",
+      "--single-process",
+      "--no-zygote",
+    ],
+    executablePath:
+      process.env.NODE_ENV === "production"
+        ? process.env.PUPPETEER_EXECUTABLE_PATH
+        : puppeteer.executablePath(),
   });
 
   const page = await browser.newPage();
-  await page.goto(url, { waitUntil: "networkidle2" });
+  await page.goto(url, { timeout: 0, waitUntil: "domcontentloaded" });
   const html = await page.content();
   await browser.close();
 
@@ -44,7 +54,7 @@ app.post("/process-link", async (req: Request, res: Response) => {
 
   const { content, title, byline, publishedTime, siteName, lang } = parsed;
 
-  const text = htmlToText(content, {
+  const text = convert(content, {
     selectors: [
       { selector: "del", format: "skip" },
       { selector: "script", format: "skip" },
@@ -86,7 +96,7 @@ app.post("/process-link", async (req: Request, res: Response) => {
   });
 });
 
-app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
+app.use((err, req, res, _next) => {
   res.status(500).send("Something went wrong");
 });
 
