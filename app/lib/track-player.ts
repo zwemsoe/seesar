@@ -42,3 +42,14 @@ export const playbackService = async () => {
     TrackPlayer.skipToPrevious();
   });
 };
+
+export const getTrackId = (url: string, language: string) => {
+  return `${url}-${language}`;
+};
+
+export const getTrackUrl = (id: string) => {
+  if (!id) {
+    return "";
+  }
+  return id.split("-")[0];
+};

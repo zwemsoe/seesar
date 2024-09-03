@@ -10,11 +10,12 @@ import { Play, Pause, Undo, Redo } from "~/lib/icons";
 import { Button } from "../ui/button";
 import { useColorScheme } from "~/hooks/useColorScheme";
 import { Colors } from "~/lib/constants";
-import { Circle } from "react-native-animated-spinkit";
+import { CircleFade } from "react-native-animated-spinkit";
 import { TrackProgress } from "./TrackProgress";
 import { cn } from "~/lib/utils";
 import { useSynthesizeSpeech } from "~/hooks/useSynthesizeSpeech";
 import { useCurrentReaderStore } from "~/state/store";
+import { getTrackId } from "~/lib/track-player";
 
 const AudioPlayer = ({
   text = "",
@@ -31,9 +32,15 @@ const AudioPlayer = ({
 }) => {
   const language = useCurrentReaderStore((state) => state.language);
   const setLanguage = useCurrentReaderStore((state) => state.setLanguage);
+  const activeTrack = useCurrentReaderStore((state) => state.activeTrack);
+  const setActiveTrack = useCurrentReaderStore((state) => state.setActiveTrack);
   const [speed, setSpeed] = useState(1);
   const progress = useProgress();
-  const { isLoading: isSynthesizing, fileUri } = useSynthesizeSpeech({
+  const {
+    isLoading: isSynthesizing,
+    fileUri,
+    error,
+  } = useSynthesizeSpeech({
     text: text ?? "",
     url,
   });
@@ -42,23 +49,24 @@ const AudioPlayer = ({
   const { playing } = useIsPlaying();
 
   const addTrack = async () => {
-    try {
-      await TrackPlayer.reset();
-      const track: Track = {
-        id: 1,
-        url: fileUri,
-        title,
-        artist: siteName,
-      };
-      await TrackPlayer.add(track);
-    } catch (error) {
-      console.error("Error setting up player:", error);
+    if (activeTrack?.id === getTrackId(url, language)) {
+      return;
     }
+
+    await TrackPlayer.reset();
+    const track: Track = {
+      id: getTrackId(url, language),
+      url: fileUri,
+      title,
+      artist: siteName,
+    };
+    await TrackPlayer.add(track);
+    setActiveTrack(track);
   };
 
   useEffect(() => {
     setIsLoading(textLoading || isSynthesizing);
-    if (!textLoading && !isSynthesizing && fileUri) {
+    if (fileUri) {
       addTrack();
     }
   }, [textLoading, fileUri, isSynthesizing, language]);
@@ -91,6 +99,14 @@ const AudioPlayer = ({
     setLanguage(language === "en" ? "mm" : "en");
   };
 
+  if (error) {
+    return (
+      <Text className='text-red-500 text-center font-medium mt-2 leading-loose'>
+        {error}
+      </Text>
+    );
+  }
+
   return (
     <View className='justify-center'>
       <TrackProgress disable={isLoading} />
@@ -113,7 +129,7 @@ const AudioPlayer = ({
             <Undo size={24} color={Colors[colorScheme ?? "light"].icon} />
           </Button>
           {isLoading ? (
-            <Circle size={24} color={Colors[colorScheme ?? "light"].icon} />
+            <CircleFade size={32} color={Colors[colorScheme ?? "light"].icon} />
           ) : (
             <TouchableOpacity
               onPress={togglePlayback}

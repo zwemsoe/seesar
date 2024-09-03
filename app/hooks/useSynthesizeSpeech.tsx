@@ -1,9 +1,15 @@
-import { arrayBufferToBase64, transformToSSML } from "~/lib/speech";
 import * as FileSystem from "expo-file-system";
 import { useEffect, useState } from "react";
 import TrackPlayer from "react-native-track-player";
 import { useCurrentReaderStore } from "~/state/store";
 import { getAudioFileName } from "~/lib/utils";
+import { azureSynthesizeSpeech } from "~/lib/azure-speech";
+import {
+  MAX_CHARS_TO_SYNTHESIZE,
+  MIN_CHARS_TO_SYNTHESIZE,
+} from "~/lib/constants";
+import { useTranslation } from "react-i18next";
+import { getTrackId } from "~/lib/track-player";
 
 export const useSynthesizeSpeech = ({
   text,
@@ -12,13 +18,16 @@ export const useSynthesizeSpeech = ({
   text: string;
   url: string;
 }) => {
+  const activeTrack = useCurrentReaderStore((state) => state.activeTrack);
+  const { t } = useTranslation();
   const language = useCurrentReaderStore((state) => state.language);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!activeTrack);
   const [fileUri, setFileUri] = useState("");
   const [error, setError] = useState("");
 
   const synthesizeSpeech = async () => {
     setIsLoading(true);
+
     try {
       await TrackPlayer.reset();
       const cachedFileUri = await getAudioFileName(url, language);
@@ -29,44 +38,23 @@ export const useSynthesizeSpeech = ({
         return;
       }
 
-      const subscriptionKey = process.env.EXPO_PUBLIC_SPEECH_API_KEY!;
-      const region = process.env.EXPO_PUBLIC_SPEECH_REGION!;
-      const endpoint = `https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`;
-
-      const tokenResponse = await fetch(
-        `https://${region}.api.cognitive.microsoft.com/sts/v1.0/issueToken`,
-        {
-          method: "POST",
-          headers: {
-            "Ocp-Apim-Subscription-Key": subscriptionKey,
-          },
-        }
-      );
-
-      const accessToken = await tokenResponse.text();
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/ssml+xml",
-          "X-Microsoft-OutputFormat": "audio-16khz-128kbitrate-mono-mp3",
-        },
-        body: transformToSSML(text, language),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (text.length < MIN_CHARS_TO_SYNTHESIZE) {
+        setError(t("textTooShort"));
+        setIsLoading(false);
+        return;
       }
 
-      const audioData = await response.arrayBuffer();
+      if (text.length > MAX_CHARS_TO_SYNTHESIZE) {
+        setError(t("textTooLong"));
+        setIsLoading(false);
+        return;
+      }
 
-      await FileSystem.writeAsStringAsync(
-        cachedFileUri,
-        arrayBufferToBase64(audioData),
-        {
-          encoding: FileSystem.EncodingType.Base64,
-        }
-      );
+      const audioData = await azureSynthesizeSpeech(text, language);
+
+      await FileSystem.writeAsStringAsync(cachedFileUri, audioData, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
 
       setFileUri(cachedFileUri);
     } catch (error) {
@@ -79,7 +67,9 @@ export const useSynthesizeSpeech = ({
 
   useEffect(() => {
     if (text && url && language) {
-      synthesizeSpeech();
+      if (activeTrack?.id !== getTrackId(url, language)) {
+        synthesizeSpeech();
+      }
     }
   }, [text, url, language]);
 

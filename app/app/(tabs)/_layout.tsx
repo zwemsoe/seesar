@@ -11,6 +11,7 @@ import { HelloWave } from "~/components/HelloWave";
 import { cn } from "~/lib/utils";
 import "~/translations";
 import { useTranslation } from "react-i18next";
+import { FloatingPlayer } from "~/components/audio-player/FloatingPlayer";
 
 export default function TabLayout() {
   const { t } = useTranslation();

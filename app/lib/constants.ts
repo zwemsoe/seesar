@@ -49,3 +49,6 @@ export const DARK_THEME: Theme = {
 };
 
 export const AUDIO_FILE_PREFIX = "seesar-audio-";
+
+export const MIN_CHARS_TO_SYNTHESIZE = 500; // ~100 words
+export const MAX_CHARS_TO_SYNTHESIZE = 6000; // ~1200 words

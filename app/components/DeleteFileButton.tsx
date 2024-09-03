@@ -13,80 +13,72 @@ import {
 import { Button } from "./ui/button";
 import { Text } from "./ui/text";
 import { useTranslation } from "react-i18next";
-import { cn } from "~/lib/utils";
+import { cn, getAudioFileName } from "~/lib/utils";
 import { Trash } from "~/lib/icons";
-import { AUDIO_FILE_PREFIX, Colors } from "~/lib/constants";
+import { Colors } from "~/lib/constants";
 import * as FileSystem from "expo-file-system";
 import { useDatabase } from "~/db/provider";
 import { linkContentTable } from "~/db/schema";
 import { useQueryClient } from "@tanstack/react-query";
+import { eq } from "drizzle-orm";
+import { useRouter } from "expo-router";
 import { useCurrentReaderStore } from "~/state/store";
 import TrackPlayer from "react-native-track-player";
+import { getTrackId } from "~/lib/track-player";
 
-export const DeleteFilesButton = () => {
+export const DeleteFileButton = ({ url }: { url: string }) => {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const { db } = useDatabase();
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
   const { colorScheme } = useColorScheme();
+  const activeTrack = useCurrentReaderStore((state) => state.activeTrack);
   const setActiveTrack = useCurrentReaderStore((state) => state.setActiveTrack);
 
-  const handleDeleteFiles = async () => {
-    await TrackPlayer.reset();
-    setActiveTrack(undefined);
-
-    const cacheDir = FileSystem.cacheDirectory ?? "";
-    const files = await FileSystem.readDirectoryAsync(cacheDir);
-
-    for (const file of files) {
-      if (file.startsWith(AUDIO_FILE_PREFIX)) {
-        await FileSystem.deleteAsync(`${cacheDir}/${file}`);
+  const handleDeleteFile = async () => {
+    try {
+      if (
+        activeTrack?.id === getTrackId(url, "en") ||
+        activeTrack?.id === getTrackId(url, "mm")
+      ) {
+        await TrackPlayer.reset();
+        setActiveTrack(undefined);
       }
+      const enFileUri = await getAudioFileName(url, "en");
+      const mmFileUri = await getAudioFileName(url, "mm");
+      await FileSystem.deleteAsync(enFileUri);
+      await FileSystem.deleteAsync(mmFileUri);
+      await db?.delete(linkContentTable).where(eq(linkContentTable.url, url));
+      queryClient.invalidateQueries();
+      router.back();
+    } catch (error) {
+      console.log(error);
     }
-
-    await db?.delete(linkContentTable);
-    queryClient.invalidateQueries();
   };
 
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button
-          className='w-11/12 flex-row min-h-14 justify-between items-center'
-          variant='secondary'
-        >
-          <Text
-            className={cn("leading-loose", {
-              "py-2": currentLanguage === "mm",
-            })}
-          >
-            {t("deleteFiles")}
-          </Text>
+        <Button variant='ghost' className='pt-4'>
           <Trash color={Colors[colorScheme ?? "light"].icon} size={18} />
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent className='w-4/5'>
         <AlertDialogHeader>
           <AlertDialogTitle
             className={cn("leading-loose", {
               "py-4": currentLanguage === "mm",
             })}
           >
-            {t("deleteFilesConfirmation")}
+            {t("confirmDelete")}
           </AlertDialogTitle>
-          <AlertDialogDescription
-            className={cn("leading-loose", {
-              "py-2": currentLanguage === "mm",
-            })}
-          >
-            {t("deleteFilesConfirmationDescription")}
-          </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>
             <Text>Cancel</Text>
           </AlertDialogCancel>
-          <AlertDialogAction onPress={handleDeleteFiles}>
+          <AlertDialogAction onPress={handleDeleteFile}>
             <Text>OK</Text>
           </AlertDialogAction>
         </AlertDialogFooter>

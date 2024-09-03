@@ -1,3 +1,4 @@
+import { Track } from "react-native-track-player";
 import { create } from "zustand";
 import { SupportedLanguages } from "~/translations";
 
@@ -6,6 +7,8 @@ export type CurrentReader = {
   language: SupportedLanguages;
   setUrl: (url: string) => void;
   setLanguage: (language: SupportedLanguages) => void;
+  activeTrack: Track | undefined;
+  setActiveTrack: (track: Track | undefined) => void;
 };
 
 export const useCurrentReaderStore = create<CurrentReader>((set) => ({
@@ -13,4 +16,6 @@ export const useCurrentReaderStore = create<CurrentReader>((set) => ({
   language: "mm",
   setUrl: (url: string) => set({ url }),
   setLanguage: (language: SupportedLanguages) => set({ language }),
+  activeTrack: undefined,
+  setActiveTrack: (track: Track | undefined) => set({ activeTrack: track }),
 }));

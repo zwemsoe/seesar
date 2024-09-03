@@ -14,12 +14,14 @@ import { useCurrentReaderStore } from "~/state/store";
 import { LinkContent } from "~/db/schema";
 import { useDatabase } from "~/db/provider";
 import { fetchLinkContent } from "~/lib/fetchLinkContent";
+import { useTranslation } from "react-i18next";
+import { DeleteFileButton } from "~/components/DeleteFileButton";
 
 export default function AudioReaderPage() {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { db } = useDatabase();
   const router = useRouter();
-
   const url = useCurrentReaderStore((state) => state.url);
   const language = useCurrentReaderStore((state) => state.language);
   const { colorScheme } = useColorScheme();
@@ -39,79 +41,90 @@ export default function AudioReaderPage() {
         <TouchableOpacity onPress={() => router.back()}>
           <ChevronLeftIcon color={Colors[colorScheme ?? "light"].icon} />
         </TouchableOpacity>
+        <DeleteFileButton url={url} />
       </View>
-      <ScrollView className='flex-1 mt-3.5'>
-        <View className='flex-col pb-4'>
-          {isLoading ? (
-            <>
-              <Skeleton className='h-5 w-28 mt' />
-              <Skeleton className='h-6 w-full mt-3' />
-              <Skeleton className='h-6 w-80 mt-2' />
-              <Skeleton className='h-5 w-40 mt-2' />
-              <Skeleton className='h-5 w-40 mt-2' />
-            </>
-          ) : (
-            <>
-              <View className='flex-row'>
-                <Badge variant='secondary'>
-                  <ExternalLink href={url}>
-                    <Text className='text-sm color-primary'>
-                      {urlHostname}
-                      {"  "}
-                      <ExternalLinkIcon
-                        color={Colors[colorScheme ?? "light"].icon}
-                        size={12}
-                      />
-                    </Text>
-                  </ExternalLink>
-                </Badge>
-              </View>
-              <Text className='text-xl font-bold mt-3 color-primary'>
-                {data?.title}
-              </Text>
-              <Text className='text-md font-semibold text-gray-500 mt-2'>
-                {data?.author}
-              </Text>
-              <Text className='text-md font-semibold text-gray-500 mt-2'>
-                {data?.publishedTime &&
-                  new Date(data.publishedTime).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-              </Text>
-            </>
-          )}
+      {error ? (
+        <View className='flex-1 items-center justify-center h-full'>
+          <Text className='text-lg font-semibold leading-loose text-center text-red-500'>
+            {t("serverError")}
+          </Text>
         </View>
-        <Separator className='mb-2' />
-        <View className='px-1'>
-          {isLoading ? (
-            <View>
-              {Array.from({ length: 12 }).map((_, index) => (
-                <Skeleton key={index} className='h-5 w-full my-2' />
-              ))}
+      ) : (
+        <>
+          <ScrollView className='flex-1 mt-3.5'>
+            <View className='flex-col pb-4'>
+              {isLoading ? (
+                <>
+                  <Skeleton className='h-5 w-28 mt' />
+                  <Skeleton className='h-6 w-full mt-3' />
+                  <Skeleton className='h-6 w-80 mt-2' />
+                  <Skeleton className='h-5 w-40 mt-2' />
+                  <Skeleton className='h-5 w-40 mt-2' />
+                </>
+              ) : (
+                <>
+                  <View className='flex-row'>
+                    <Badge variant='secondary'>
+                      <ExternalLink href={url}>
+                        <Text className='text-sm color-primary'>
+                          {urlHostname}
+                          {"  "}
+                          <ExternalLinkIcon
+                            color={Colors[colorScheme ?? "light"].icon}
+                            size={12}
+                          />
+                        </Text>
+                      </ExternalLink>
+                    </Badge>
+                  </View>
+                  <Text className='text-xl font-bold mt-3 color-primary'>
+                    {data?.title}
+                  </Text>
+                  <Text className='text-md font-semibold text-gray-500 mt-2'>
+                    {data?.author}
+                  </Text>
+                  <Text className='text-md font-semibold text-gray-500 mt-2'>
+                    {data?.publishedTime &&
+                      new Date(data.publishedTime).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                  </Text>
+                </>
+              )}
             </View>
-          ) : (
-            <Text
-              className={cn("text-primary leading-loose text-lg", {
-                "pt-2": language === "mm",
-              })}
-            >
-              {language === "en" ? data?.textEn : data?.textMM}
-            </Text>
-          )}
-        </View>
-      </ScrollView>
-      <Separator className='my-2' />
-      <View className='mt-4'>
-        <AudioPlayer
-          text={language === "en" ? data?.textEn : data?.textMM}
-          url={url}
-          textLoading={isLoading}
-          title={data?.title ?? ""}
-          siteName={urlHostname ?? ""}
-        />
-      </View>
+            <Separator className='mb-2' />
+            <View className='px-1'>
+              {isLoading ? (
+                <View>
+                  {Array.from({ length: 12 }).map((_, index) => (
+                    <Skeleton key={index} className='h-5 w-full my-2' />
+                  ))}
+                </View>
+              ) : (
+                <Text
+                  className={cn("text-primary leading-loose text-lg", {
+                    "pt-2": language === "mm",
+                  })}
+                >
+                  {language === "en" ? data?.textEn : data?.textMM}
+                </Text>
+              )}
+            </View>
+          </ScrollView>
+          <Separator className='my-2' />
+          <View className='mt-4'>
+            <AudioPlayer
+              text={language === "en" ? data?.textEn : data?.textMM}
+              url={url}
+              textLoading={isLoading}
+              title={data?.title ?? ""}
+              siteName={urlHostname ?? ""}
+            />
+          </View>
+        </>
+      )}
     </View>
   );
 }

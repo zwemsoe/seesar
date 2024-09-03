@@ -9,9 +9,12 @@
   "samples": "နမူနာဖိုင်များ",
   "translate": "ဘာသာပြန်ပါ",
   "addYourFirstFile": "ဖိုင်အသစ်ထည့်ပါ",
-  "serverError": "အမှားဖြစ်ပေါ်ခဲ့သည်",
-  "invalidInput": "ကျေးဇူးပြု၍ မှန်ကန်သော လင့်ခ်တစ်ခု ထည့်ပါ",
+  "serverError": "အမှားဖြစ်ပေါ်ခဲ့သည်။",
+  "invalidInput": "ကျေးဇူးပြု၍ မှန်ကန်သော လင့်ခ်တစ်ခု ထည့်ပါ။",
   "deleteFiles": "ဖိုင်များအားလုံးကို ဖြတ်ပါ",
-  "deleteFilesConfirmation": "ဖိုင်များအားလုံးကို ဖြတ်ပါ",
-  "deleteFilesConfirmationDescription": "ပြန်ပြင်၍မရပါ။ သင်၏ဖိုင်များကို အပြီးအပိုင်ဖျက်ပါမည်"
+  "deleteFilesConfirmation": "ဖိုင်များအားလုံးကို ဖြတ်ပါ။",
+  "deleteFilesConfirmationDescription": "ပြန်ပြင်၍မရပါ။ သင်၏ဖိုင်များကို အပြီးအပိုင်ဖျက်ပါမည်။",
+  "textTooShort": "စာသားသည် အရမ်းတိုသည်။ အသံအဖြစ်သို့ ပြောင်းလဲ၍မရပါ။",
+  "textTooLong": "စာသားသည် အရမ်းရှည်သည်။ အသံအဖြစ်သို့ ပြောင်းလဲ၍မရပါ။",
+  "confirmDelete": "ဖျက်ရန် အတည်ပြုပါ"
 }

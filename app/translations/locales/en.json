@@ -13,5 +13,8 @@
   "deleteFiles": "Delete all files",
   "translate": "Translate",
   "deleteFilesConfirmation": "Delete all files",
-  "deleteFilesConfirmationDescription": "This action cannot be undone. This will permanently delete your local files."
+  "deleteFilesConfirmationDescription": "This action cannot be undone. This will permanently delete your local files.",
+  "textTooShort": "The text is too short to generate into an audio. Please try a different link.",
+  "textTooLong": "The text is too long to generate into an audio. Please try a different link.",
+  "confirmDelete": "Confirm delete"
 }

@@ -3,16 +3,7 @@ import { AwesomeSliderProps, Slider } from "react-native-awesome-slider";
 import { useSharedValue } from "react-native-reanimated";
 import TrackPlayer, { useProgress } from "react-native-track-player";
 import { useColorScheme } from "~/hooks/useColorScheme";
-
-export const formatSecondsToMinutes = (seconds: number) => {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = Math.floor(seconds % 60);
-
-  const formattedMinutes = String(minutes).padStart(2, "0");
-  const formattedSeconds = String(remainingSeconds).padStart(2, "0");
-
-  return `${formattedMinutes}:${formattedSeconds}`;
-};
+import { formatSecondsToMinutes } from "~/lib/utils";
 
 export const TrackProgress = (props: Pick<AwesomeSliderProps, "disable">) => {
   const { duration, position } = useProgress(250);
