@@ -13,7 +13,7 @@ import { cn } from "~/lib/utils";
 import { useCurrentReaderStore } from "~/state/store";
 import { LinkContent } from "~/db/schema";
 import { useDatabase } from "~/db/provider";
-import { fetchLinkContent } from "~/lib/fetchLinkContent";
+import { processUrl } from "~/lib/process-url";
 import { useTranslation } from "react-i18next";
 import { DeleteFileButton } from "~/components/DeleteFileButton";
 
@@ -28,7 +28,7 @@ export default function AudioReaderPage() {
 
   let { data, isLoading, error } = useQuery<LinkContent>({
     queryKey: ["link_content", url],
-    queryFn: () => fetchLinkContent(url, db, queryClient),
+    queryFn: () => processUrl(url, db, queryClient),
     enabled: !!url,
   });
 

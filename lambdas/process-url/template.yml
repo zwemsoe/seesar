@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  ProcessUrlLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs18.x
+      CodeUri: .
+      Description: Process URL Lambda
+      Timeout: 60
+      MemorySize: 1536
+      Architectures:
+        - x86_64
+      Layers:
+        - arn:aws:lambda:us-west-2:764866452798:layer:chrome-aws-lambda:47

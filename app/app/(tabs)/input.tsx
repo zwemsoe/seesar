@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView } from "react-native";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";

@@ -22,7 +22,7 @@ TrackPlayer.registerPlaybackService(() => playbackService);
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme();
+  const { colorScheme, setColorScheme } = useColorScheme();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
   const [error, setError] = React.useState(false);
   const { success, error: migrationError } = useMigrationHelper();
