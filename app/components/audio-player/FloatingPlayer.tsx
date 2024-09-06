@@ -15,6 +15,7 @@ import { cn, formatSecondsToMinutes, truncateString } from "~/lib/utils";
 
 export const FloatingPlayer = () => {
   const router = useRouter();
+  const language = useCurrentReaderStore((state) => state.language);
   const setUrl = useCurrentReaderStore((state) => state.setUrl);
   const { colorScheme } = useColorScheme();
   const { playing } = useIsPlaying();

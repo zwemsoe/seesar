@@ -25,12 +25,13 @@ export const useSynthesizeSpeech = ({
   const [fileUri, setFileUri] = useState("");
   const [error, setError] = useState("");
 
-  const synthesizeSpeech = async () => {
+  const generateFileUri = async () => {
     setIsLoading(true);
 
     try {
       await TrackPlayer.reset();
       const cachedFileUri = await getAudioFileName(url, language);
+
       const fileInfo = await FileSystem.getInfoAsync(cachedFileUri);
       if (fileInfo.exists) {
         setFileUri(cachedFileUri);
@@ -68,7 +69,7 @@ export const useSynthesizeSpeech = ({
   useEffect(() => {
     if (text && url && language) {
       if (activeTrack?.id !== getTrackId(url, language)) {
-        synthesizeSpeech();
+        generateFileUri();
       }
     }
   }, [text, url, language]);

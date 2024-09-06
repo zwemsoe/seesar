@@ -49,7 +49,7 @@ const AudioPlayer = ({
   const { playing } = useIsPlaying();
 
   const addTrack = async () => {
-    if (activeTrack?.id === getTrackId(url, language)) {
+    if (activeTrack?.url === fileUri) {
       return;
     }
 
@@ -66,10 +66,10 @@ const AudioPlayer = ({
 
   useEffect(() => {
     setIsLoading(textLoading || isSynthesizing);
-    if (fileUri) {
+    if (fileUri && !isSynthesizing && !textLoading) {
       addTrack();
     }
-  }, [textLoading, fileUri, isSynthesizing, language]);
+  }, [textLoading, fileUri, isSynthesizing]);
 
   async function togglePlayback() {
     if (playing) {

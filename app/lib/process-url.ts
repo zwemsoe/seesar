@@ -24,18 +24,20 @@ export const processUrl = async (
     }
 
     const response = await fetch(
-      `${process.env.EXPO_PUBLIC_AWS_LAMBDA_FUNCTION_URL}/?url=${url}`,
+      `${process.env.EXPO_PUBLIC_AWS_API_URL}/process-url`,
       {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
+          authorizationToken: process.env.EXPO_PUBLIC_AWS_API_AUTH_TOKEN!,
         },
+        body: JSON.stringify({ url }),
       }
     );
 
     const result: LinkContent = await response.json();
 
-    if (!result) {
+    if (!result.url) {
       throw new Error("Unable to process link");
     }
 
