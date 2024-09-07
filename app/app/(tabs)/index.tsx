@@ -8,7 +8,7 @@ import { Text } from "~/components/ui/text";
 import { LocalDatabase, useDatabase } from "~/db/provider";
 import { LinkContent, linkContentTable } from "~/db/schema";
 import { useColorScheme } from "~/hooks/useColorScheme";
-import { Colors } from "~/lib/constants";
+import { Colors, QueryKeys } from "~/lib/constants";
 import { cn, truncateString } from "~/lib/utils";
 import { useCurrentReaderStore } from "~/state/store";
 import { Button } from "~/components/ui/button";
@@ -39,7 +39,7 @@ export default function HomeScreen() {
   const activeTrack = useCurrentReaderStore((state) => state.activeTrack);
 
   let { data, isLoading, error } = useQuery<LinkContent[]>({
-    queryKey: ["your_links"],
+    queryKey: QueryKeys.yourLinks,
     queryFn: () => fetchYourLinks(db),
     refetchOnMount: true,
   });

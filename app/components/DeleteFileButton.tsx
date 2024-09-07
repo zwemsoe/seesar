@@ -15,10 +15,10 @@ import { Text } from "./ui/text";
 import { useTranslation } from "react-i18next";
 import { cn, getAudioFileName } from "~/lib/utils";
 import { Trash } from "~/lib/icons";
-import { Colors } from "~/lib/constants";
+import { Colors, QueryKeys } from "~/lib/constants";
 import * as FileSystem from "expo-file-system";
 import { useDatabase } from "~/db/provider";
-import { linkContentTable } from "~/db/schema";
+import { LinkContent, linkContentTable } from "~/db/schema";
 import { useQueryClient } from "@tanstack/react-query";
 import { eq } from "drizzle-orm";
 import { useRouter } from "expo-router";
@@ -37,21 +37,37 @@ export const DeleteFileButton = ({ url }: { url: string }) => {
   const setActiveTrack = useCurrentReaderStore((state) => state.setActiveTrack);
 
   const handleDeleteFile = async () => {
+    if (
+      activeTrack?.id === getTrackId(url, "en") ||
+      activeTrack?.id === getTrackId(url, "mm")
+    ) {
+      await TrackPlayer.reset();
+      setActiveTrack(undefined);
+    }
+
     try {
-      if (
-        activeTrack?.id === getTrackId(url, "en") ||
-        activeTrack?.id === getTrackId(url, "mm")
-      ) {
-        await TrackPlayer.reset();
-        setActiveTrack(undefined);
-      }
       const enFileUri = await getAudioFileName(url, "en");
       const mmFileUri = await getAudioFileName(url, "mm");
-      await FileSystem.deleteAsync(enFileUri);
-      await FileSystem.deleteAsync(mmFileUri);
-      await db?.delete(linkContentTable).where(eq(linkContentTable.url, url));
-      queryClient.invalidateQueries();
-      router.back();
+      const enFileExists = await FileSystem.getInfoAsync(enFileUri);
+      const mmFileExists = await FileSystem.getInfoAsync(mmFileUri);
+      if (enFileExists.exists) {
+        await FileSystem.deleteAsync(enFileUri);
+      }
+      if (mmFileExists.exists) {
+        await FileSystem.deleteAsync(mmFileUri);
+      }
+      await db
+        ?.delete(linkContentTable)
+        .where(eq(linkContentTable.url, url))
+        .returning();
+      queryClient.setQueryData(
+        QueryKeys.yourLinks,
+        (oldData: LinkContent[]) => {
+          return oldData?.filter((item: LinkContent) => item.url !== url);
+        }
+      );
+
+      router.navigate("/");
     } catch (error) {
       console.log(error);
     }

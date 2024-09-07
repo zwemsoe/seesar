@@ -40,7 +40,7 @@ export const FloatingPlayer = () => {
       className={cn(
         "w-11/12 absolute left-5 bottom-4 p-4 rounded-lg flex-row items-center justify-between shadow-sm",
         {
-          "bg-emerald-200": colorScheme === "light",
+          "bg-emerald-300": colorScheme === "light",
           "bg-emerald-600": colorScheme === "dark",
         }
       )}
@@ -50,7 +50,7 @@ export const FloatingPlayer = () => {
           <Link2 size={18} color={Colors[colorScheme ?? "light"].background} />
         </View>
         <View className='flex-col'>
-          <Text className='font-semibold text-md'>
+          <Text className='font-semibold text-md text-black'>
             {truncateString(activeTrack?.title ?? "", 20)}
           </Text>
           <Text className='text-gray-800 text-sm'>{trackElapsedTime}</Text>
@@ -58,17 +58,9 @@ export const FloatingPlayer = () => {
       </View>
       <TouchableOpacity onPress={togglePlayback} className='p-2 pr-4'>
         {playing ? (
-          <Pause
-            size={20}
-            fill={Colors[colorScheme ?? "light"].icon}
-            color={Colors[colorScheme ?? "light"].icon}
-          />
+          <Pause size={20} fill={"black"} color={"black"} />
         ) : (
-          <Play
-            size={20}
-            fill={Colors[colorScheme ?? "light"].icon}
-            color={Colors[colorScheme ?? "light"].icon}
-          />
+          <Play size={20} fill={"black"} color={"black"} />
         )}
       </TouchableOpacity>
     </TouchableOpacity>

@@ -14,7 +14,7 @@ export type CurrentReader = {
 export const useCurrentReaderStore = create<CurrentReader>((set) => ({
   url: "",
   language: "mm",
-  setUrl: (url: string) => set({ url }),
+  setUrl: (url: string) => set({ url: url.trim() }),
   setLanguage: (language: SupportedLanguages) => set({ language }),
   activeTrack: undefined,
   setActiveTrack: (track: Track | undefined) => set({ activeTrack: track }),

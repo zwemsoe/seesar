@@ -6,12 +6,22 @@ const puppeteer = require("puppeteer-core");
 const chromium = require("@sparticuz/chromium");
 
 exports.handler = async (event, context, callback) => {
-  const url = event.queryStringParameters?.url;
+  const authToken = event.headers.authorization || "";
+
+  if (authToken !== process.env.AUTH_TOKEN) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify({ error: "Unauthorized" }),
+    };
+  }
+
+  const eventBody = JSON.parse(event.body);
+  const url = eventBody.url || "";
 
   if (!url && !Boolean(new URL(url))) {
     return {
       statusCode: 400,
-      body: JSON.stringify({ message: "URL is required" }),
+      body: JSON.stringify({ error: "URL is required" }),
     };
   }
 

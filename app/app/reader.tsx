@@ -3,7 +3,7 @@ import { Text, View, TouchableOpacity, ScrollView } from "react-native";
 import { ExternalLink } from "~/components/ExternalLink";
 import { Badge } from "~/components/ui/badge";
 import { useColorScheme } from "~/hooks/useColorScheme";
-import { Colors } from "~/lib/constants";
+import { Colors, QueryKeys } from "~/lib/constants";
 import { ChevronLeftIcon, ExternalLink as ExternalLinkIcon } from "~/lib/icons";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Skeleton } from "~/components/ui/skeleton";
@@ -27,7 +27,7 @@ export default function AudioReaderPage() {
   const { colorScheme } = useColorScheme();
 
   let { data, isLoading, error } = useQuery<LinkContent>({
-    queryKey: ["link_content", url],
+    queryKey: QueryKeys.linkContent(url),
     queryFn: () => processUrl(url, db, queryClient),
     enabled: !!url,
   });
@@ -38,7 +38,7 @@ export default function AudioReaderPage() {
   return (
     <View className='container py-16 px-4 h-full'>
       <View className='flex-row items-center justify-between'>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => router.navigate("/")}>
           <ChevronLeftIcon color={Colors[colorScheme ?? "light"].icon} />
         </TouchableOpacity>
         <DeleteFileButton url={url} />
