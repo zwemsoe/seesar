@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { desc } from "drizzle-orm";
 import { useRouter } from "expo-router";
 import { View } from "react-native";
-import { Link2, AudioLines } from "~/lib/icons";
+import { AudioLines } from "~/lib/icons";
 import { StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { Text } from "~/components/ui/text";
 import { LocalDatabase, useDatabase } from "~/db/provider";
@@ -15,6 +15,7 @@ import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useTranslation } from "react-i18next";
 import { FloatingPlayer } from "~/components/audio-player/FloatingPlayer";
+import { samples } from "~/assets/samples/data";
 
 const fetchYourLinks = async (db: LocalDatabase) => {
   if (!db) {
@@ -74,10 +75,10 @@ export default function HomeScreen() {
               }}
               className='flex-row items-center gap-4 border-b border-gray-200 pb-4 mb-4'
             >
-              <View className='p-2 bg-primary rounded-lg w-12 h-12 items-center justify-center'>
-                <Link2
+              <View className='p-2 bg-secondary  rounded-lg w-12 h-12 items-center justify-center'>
+                <AudioLines
                   size={18}
-                  color={Colors[colorScheme ?? "light"].background}
+                  color={Colors[colorScheme ?? "light"].icon}
                 />
               </View>
               <View className='flex-col'>
@@ -119,13 +120,13 @@ export default function HomeScreen() {
         <Text className='text-2xl font-bold mb-3 mt-10 leading-loose'>
           {t("samples")}
         </Text>
-        {Array.from({ length: 5 }).map((item) => (
+        {samples.map((item) => (
           <TouchableOpacity
             key={Math.random()}
-            //  onPress={() => {
-            //    setUrl(item.url);
-            //    router.push(`/reader`);
-            //  }}
+            onPress={() => {
+              setUrl(item.url);
+              router.push(`/reader`);
+            }}
             className='flex-row items-center gap-4 border-b border-gray-200 pb-4 mb-4'
           >
             <View className='p-2 bg-secondary rounded-lg w-12 h-12 items-center justify-center'>
@@ -135,9 +136,11 @@ export default function HomeScreen() {
               />
             </View>
             <View className='flex-col'>
-              <Text className='font-medium'>The Little Prince</Text>
+              <Text className='font-medium'>
+                {truncateString(item.title ?? "", 40)}
+              </Text>
               <Text className='text-sm text-gray-500 font-semibold'>
-                {`10mins`}
+                {item.siteName}
               </Text>
             </View>
           </TouchableOpacity>

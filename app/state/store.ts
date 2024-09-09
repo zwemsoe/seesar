@@ -1,5 +1,6 @@
 import { Track } from "react-native-track-player";
 import { create } from "zustand";
+import { removeTrailingSlash } from "~/lib/utils";
 import { SupportedLanguages } from "~/translations";
 
 export type CurrentReader = {
@@ -14,7 +15,7 @@ export type CurrentReader = {
 export const useCurrentReaderStore = create<CurrentReader>((set) => ({
   url: "",
   language: "mm",
-  setUrl: (url: string) => set({ url: url.trim() }),
+  setUrl: (url: string) => set({ url: removeTrailingSlash(url).trim() }),
   setLanguage: (language: SupportedLanguages) => set({ language }),
   activeTrack: undefined,
   setActiveTrack: (track: Track | undefined) => set({ activeTrack: track }),

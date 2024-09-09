@@ -9,13 +9,14 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Skeleton } from "~/components/ui/skeleton";
 import AudioPlayer from "~/components/audio-player";
 import { Separator } from "~/components/ui/separator";
-import { cn } from "~/lib/utils";
+import { cn, getHostname } from "~/lib/utils";
 import { useCurrentReaderStore } from "~/state/store";
 import { LinkContent } from "~/db/schema";
 import { useDatabase } from "~/db/provider";
 import { processUrl } from "~/lib/process-url";
 import { useTranslation } from "react-i18next";
 import { DeleteFileButton } from "~/components/DeleteFileButton";
+import { isSampleUrl } from "~/assets/samples/data";
 
 export default function AudioReaderPage() {
   const { t } = useTranslation();
@@ -32,8 +33,7 @@ export default function AudioReaderPage() {
     enabled: !!url,
   });
 
-  const urlHostname =
-    data?.url && data.url.replace(/^(https?:\/\/)?(www\.)?/, "").split("/")[0];
+  const urlHostname = data?.url && getHostname(data.url);
 
   return (
     <View className='container py-16 px-4 h-full'>
@@ -41,7 +41,7 @@ export default function AudioReaderPage() {
         <TouchableOpacity onPress={() => router.navigate("/")}>
           <ChevronLeftIcon color={Colors[colorScheme ?? "light"].icon} />
         </TouchableOpacity>
-        <DeleteFileButton url={url} />
+        {!isSampleUrl(url) && <DeleteFileButton url={url} />}
       </View>
       {error ? (
         <View className='flex-1 items-center justify-center h-full'>

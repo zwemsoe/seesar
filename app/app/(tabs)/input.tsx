@@ -22,7 +22,7 @@ export default function InputScreen() {
   const handleSubmit = () => {
     try {
       urlSchema.parse(value);
-      setUrl(value.trim());
+      setUrl(value);
       setError("");
       setValue("");
       router.push("/reader");

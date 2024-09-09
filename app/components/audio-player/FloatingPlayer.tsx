@@ -1,6 +1,6 @@
 import { TouchableOpacity } from "react-native";
 import { View } from "react-native";
-import { Link2, Pause, Play } from "~/lib/icons";
+import { AudioLines, Pause, Play } from "~/lib/icons";
 import { Colors } from "~/lib/constants";
 import { useColorScheme } from "~/hooks/useColorScheme";
 import { Text } from "../ui/text";
@@ -12,10 +12,10 @@ import { useRouter } from "expo-router";
 import { useCurrentReaderStore } from "~/state/store";
 import { getTrackUrl } from "~/lib/track-player";
 import { cn, formatSecondsToMinutes, truncateString } from "~/lib/utils";
+import { isSampleUrl } from "~/assets/samples/data";
 
 export const FloatingPlayer = () => {
   const router = useRouter();
-  const language = useCurrentReaderStore((state) => state.language);
   const setUrl = useCurrentReaderStore((state) => state.setUrl);
   const { colorScheme } = useColorScheme();
   const { playing } = useIsPlaying();
@@ -46,12 +46,12 @@ export const FloatingPlayer = () => {
       )}
     >
       <View className='flex-row items-center gap-4'>
-        <View className='p-2 bg-primary rounded-lg w-12 h-12 items-center justify-center'>
-          <Link2 size={18} color={Colors[colorScheme ?? "light"].background} />
+        <View className='p-2 bg-secondary rounded-lg w-12 h-12 items-center justify-center'>
+          <AudioLines size={18} color={Colors[colorScheme ?? "light"].icon} />
         </View>
         <View className='flex-col'>
           <Text className='font-semibold text-md text-black'>
-            {truncateString(activeTrack?.title ?? "", 20)}
+            {truncateString(activeTrack?.title ?? "", 30)}
           </Text>
           <Text className='text-gray-800 text-sm'>{trackElapsedTime}</Text>
         </View>

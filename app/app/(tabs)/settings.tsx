@@ -1,17 +1,15 @@
-import { useTranslation } from "react-i18next";
 import { StyleSheet, ScrollView, View } from "react-native";
 import { ChangeLanguageButtonDialog } from "~/components/ChangeLanguageButtonDialog";
 import { DeleteFilesButton } from "~/components/DeleteFilesButton";
+import { ExternalLink } from "~/components/ExternalLink";
 import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
 import { useColorScheme } from "~/hooks/useColorScheme";
 import { Colors } from "~/lib/constants";
-import { FacebookIcon, InstagramIcon, ExternalLink } from "~/lib/icons";
+import { ExternalLink as ExternalLinkIcon } from "~/lib/icons";
 import { cn } from "~/lib/utils";
 
 export default function ProfileScreen() {
-  const { i18n, t } = useTranslation();
-  const currentLanguage = i18n.language;
   const { colorScheme, isDarkColorScheme } = useColorScheme();
 
   return (
@@ -19,7 +17,23 @@ export default function ProfileScreen() {
       <ChangeLanguageButtonDialog />
       <DeleteFilesButton />
       <View className='flex-1'></View>
-      <Button
+      <ExternalLink href='https://forms.gle/NijaX9uzfYLqHBNJA' asChild>
+        <Button
+          className={cn("w-11/12 mb-10 justify-between flex-row", {
+            "border-black": !isDarkColorScheme,
+            "border-white": isDarkColorScheme,
+          })}
+          variant='outline'
+        >
+          <Text>Give us feedback</Text>
+          <ExternalLinkIcon
+            color={Colors[colorScheme ?? "light"].icon}
+            size={18}
+          />
+        </Button>
+      </ExternalLink>
+
+      {/* <Button
         className={cn("w-11/12 justify-between flex-row", {
           "border-black": !isDarkColorScheme,
           "border-white": isDarkColorScheme,
@@ -40,7 +54,7 @@ export default function ProfileScreen() {
         <InstagramIcon color={Colors[colorScheme ?? "light"].icon} size={18} />
         <Text>Instagram</Text>
         <ExternalLink color={Colors[colorScheme ?? "light"].icon} size={18} />
-      </Button>
+      </Button> */}
     </ScrollView>
   );
 }

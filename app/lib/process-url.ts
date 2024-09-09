@@ -3,12 +3,18 @@ import { eq } from "drizzle-orm";
 import { LocalDatabase } from "~/db/provider";
 import { LinkContent, linkContentTable } from "~/db/schema";
 import { QueryKeys } from "./constants";
+import { isSampleUrl, samples } from "~/assets/samples/data";
 
 export const processUrl = async (
   url: string,
   db: LocalDatabase,
   queryClient: QueryClient
 ): Promise<LinkContent> => {
+  const sample = isSampleUrl(url);
+  if (sample) {
+    return sample;
+  }
+
   if (!db) {
     throw new Error("Database is not initialized");
   }

@@ -34,3 +34,11 @@ export const formatSecondsToMinutes = (seconds: number) => {
 
   return `${formattedMinutes}:${formattedSeconds}`;
 };
+
+export const removeTrailingSlash = (url: string) => {
+  return url.replace(/\/$/, "");
+};
+
+export const getHostname = (url: string) => {
+  return url.replace(/^(https?:\/\/)?(www\.)?/, "").split("/")[0];
+};

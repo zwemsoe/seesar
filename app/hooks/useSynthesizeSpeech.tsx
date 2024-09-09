@@ -10,6 +10,7 @@ import {
 } from "~/lib/constants";
 import { useTranslation } from "react-i18next";
 import { getTrackId } from "~/lib/track-player";
+import { sampleAudioMap, isSampleUrl } from "~/assets/samples/data";
 
 export const useSynthesizeSpeech = ({
   text,
@@ -30,6 +31,11 @@ export const useSynthesizeSpeech = ({
 
     try {
       await TrackPlayer.reset();
+      if (isSampleUrl(url)) {
+        setFileUri(sampleAudioMap[url][language]);
+        setIsLoading(false);
+        return;
+      }
       const cachedFileUri = await getAudioFileName(url, language);
 
       const fileInfo = await FileSystem.getInfoAsync(cachedFileUri);

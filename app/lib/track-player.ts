@@ -44,12 +44,12 @@ export const playbackService = async () => {
 };
 
 export const getTrackId = (url: string, language: string) => {
-  return `${url}-${language}`;
+  return `${url} ${language}`;
 };
 
 export const getTrackUrl = (id: string) => {
   if (!id) {
     return "";
   }
-  return id.split("-")[0];
+  return id.split(" ")[0];
 };
